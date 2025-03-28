@@ -1,0 +1,29 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: horizon
+    working_dir: /var/www
+    volumes:
+      - .:/var/www  # Assicurati che questo punti alla tua cartella locale
+    networks:
+      - app-network
+    ports:
+      - "8000:8000"  # Port mapping per il container app
+
+  redis:
+    image: redis:alpine
+    container_name: laravel_redis
+    networks:
+      - app-network
+
+volumes:
+  # Redis non necessita di un volume persistente per il database, ma puoi aggiungerlo se necessario
+  db_data:
+    driver: local
+
+networks:
+  app-network:
+    driver: bridge
+

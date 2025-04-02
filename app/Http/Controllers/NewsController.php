@@ -26,10 +26,8 @@ class NewsController extends Controller
     
         $languages = $country->languages->pluck('language')->toArray();
     
-        // ✅ Genera una chiave di cache unica per questa combinazione
         $cacheKey = "news_{$code}_{$category}_" . implode('_', $languages);
     
-        // ✅ Recupera o salva in cache per 60 minuti
         $formatted = Cache::remember($cacheKey, now()->addMinutes(60), function () use ($code, $category, $languages) {
             $response = Http::withoutVerifying()->get('https://newsdata.io/api/1/news', [
                 'apikey' => env('NEWSDATA_API_KEY'),
